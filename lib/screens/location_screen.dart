@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/utilities/constraints_file.dart';
 import 'package:weather_app/service/weather.dart';
+import 'package:weather_app/screens/loading_screen.dart';
 
 class LocationScreen extends StatefulWidget {
+
+
 
   LocationScreen({this.locationWeather});
   final locationWeather;
@@ -30,14 +33,22 @@ class _LocationScreenState extends State<LocationScreen> {
   void updateUi(dynamic weatherData){
 
     setState(() {
+
+      if(weatherData==null){
+        temperature = 0;
+        weatherIcon = 'null';
+        weatherMessage = 'Unable to get weather data';
+        cityName = 'empty';
+      }
+
       var weatherId = weatherData['weather'][0]['id'];
       weatherIcon = weatherModel.getWeatherIcon(weatherId);
 
       cityName = weatherData['name'];
+
       double temp = weatherData['main']['temp'];
       temperature = temp.toInt();
       weatherMessage = weatherModel.getMessage(temperature);
-      var time = weatherData['timezone'];
     });
   }
 
@@ -63,7 +74,10 @@ class _LocationScreenState extends State<LocationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   FlatButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      var weatherInfo =  await weatherModel.getLocationWeather();
+                      updateUi(weatherInfo);
+                    },
                     child: const Icon(
                       Icons.near_me,
                       size: 50.0,
