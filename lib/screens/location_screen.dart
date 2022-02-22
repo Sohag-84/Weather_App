@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/utilities/constraints_file.dart';
 import 'package:weather_app/service/weather.dart';
-import 'package:weather_app/screens/loading_screen.dart';
+import 'city_screen.dart';
 
 class LocationScreen extends StatefulWidget {
-
-
 
   LocationScreen({this.locationWeather});
   final locationWeather;
@@ -38,7 +36,8 @@ class _LocationScreenState extends State<LocationScreen> {
         temperature = 0;
         weatherIcon = 'null';
         weatherMessage = 'Unable to get weather data';
-        cityName = 'empty';
+        cityName = '';
+        return;
       }
 
       var weatherId = weatherData['weather'][0]['id'];
@@ -84,7 +83,13 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return CityScreen();
+                      }
+                      )
+                      );
+                    },
                     child: const Icon(
                       Icons.location_city,
                       size: 50.0,
