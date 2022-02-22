@@ -4,8 +4,8 @@ import 'package:weather_app/service/weather.dart';
 import 'city_screen.dart';
 
 class LocationScreen extends StatefulWidget {
-
   LocationScreen({this.locationWeather});
+
   final locationWeather;
 
   @override
@@ -13,7 +13,6 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-
   WeatherModel weatherModel = WeatherModel();
 
   late String weatherIcon;
@@ -28,11 +27,9 @@ class _LocationScreenState extends State<LocationScreen> {
     updateUi(widget.locationWeather);
   }
 
-  void updateUi(dynamic weatherData){
-
+  void updateUi(dynamic weatherData) {
     setState(() {
-
-      if(weatherData==null){
+      if (weatherData == null) {
         temperature = 0;
         weatherIcon = 'null';
         weatherMessage = 'Unable to get weather data';
@@ -74,7 +71,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 children: <Widget>[
                   FlatButton(
                     onPressed: () async {
-                      var weatherInfo =  await weatherModel.getLocationWeather();
+                      var weatherInfo = await weatherModel.getLocationWeather();
                       updateUi(weatherInfo);
                     },
                     child: const Icon(
@@ -83,12 +80,14 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                    onPressed: () async{
+                      var typedName = await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
                         return CityScreen();
                       }
                       )
                       );
+                      print(typedName);
                     },
                     child: const Icon(
                       Icons.location_city,
@@ -100,19 +99,19 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
-                  children:  <Widget>[
+                  children: <Widget>[
                     Text(
                       '$temperature°',
                       style: kTempTextStyle,
                     ),
-                     Text(
-                    weatherIcon,
+                    Text(
+                      weatherIcon,
                       style: kConditionTextStyle,
                     ),
                   ],
                 ),
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.only(right: 15.0),
                 child: Text(
                   "$weatherMessage in San $cityName!",
